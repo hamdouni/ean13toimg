@@ -1,0 +1,11 @@
+<%
+	do %lib-ean13.r
+	
+	validate/full [code -]
+	code: request/content/code
+	img: ean13/make-image/text to-string code
+	image: make binary! 10'000
+	save/png image img
+	response/buffer: image
+	response/set-header 'Content-type "image/png"
+%>
