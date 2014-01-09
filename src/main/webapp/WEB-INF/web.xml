@@ -1,0 +1,21 @@
+<web-app>
+    <servlet>
+        <servlet-name>Groovy</servlet-name>
+        <servlet-class>groovy.servlet.GroovyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Groovy</servlet-name>
+        <url-pattern>*.groovy</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GroovyTemplate</servlet-name>
+        <servlet-class>groovy.servlet.TemplateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GroovyTemplate</servlet-name>
+        <url-pattern>*.gsp</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>index.groovy</welcome-file>
+    </welcome-file-list>
+</web-app>

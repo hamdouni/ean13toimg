@@ -14,6 +14,7 @@
 			<button type="submit" class="pure-button pure-button-secondary">convert</button>
 		</form>		
 		<img ng-src="{{imgurl}}" class="si-image"/>
+		<canvas id="the-canvas" style="border:1px solid black;"/>
 	</div>
 	<div class="side">
 		<h1 class="title">ean13 to img</h1>
@@ -21,6 +22,41 @@
 		<p>A rapid application to convert an <a href="http://en.wikipedia.org/wiki/European_Article_Number">ean 13</a> code to a png image using <a href="http://angularjs.org/">angularjs</a> and <a href="http://purecss.io/">pure css</a> for the ui, <a href="http://cheyenne-server.org">cheyenne rsp</a> for the backend, EAN-13 Barcode Image Generator Rebol Lib by <a href="http://www.hmkdesign.dk">Henrik Mikael Kristensen</a></p>
 	</div>
 	<a href="https://github.com/hamdouni/ean13toimg" style="font-weight:bold;text-decoration:none;padding:0em 3em;color:#f0efe7;background-color:#6b5d52;position:absolute;top:26px;right:-60px;border:0;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg);">Fork on GitHub</a><script type="text/javascript" src="lib-angular.min.js"></script>
-<script type="text/javascript">function EanCtrl($scope,$http) {$scope.eantoimg = function() {$scope.imgurl = "srv-eantoimg.rsp?code=" + $scope.code;}}</script>
+
+	<script type="text/javascript" src="pdf.js"></script>
+	<script type="text/javascript">function EanCtrl($scope,$http) {
+		$scope.eantoimg = function() {
+			$scope.imgurl = "srv-eantoimg.rsp?code=" + $scope.code; 
+
+			PDFJS.getDocument("srv-eantopdf.rsp?code=" + $scope.code).then(function(pdf) {
+			  // Using promise to fetch the page
+			  pdf.getPage(1).then(function(page) {
+			    var scale = 1.0;
+			    var viewport = page.getViewport(scale);
+
+			    //
+			    // Prepare canvas using PDF page dimensions
+			    //
+			    var canvas = document.getElementById('the-canvas');
+			    var context = canvas.getContext('2d');
+			    canvas.height = viewport.height;
+			    canvas.width = viewport.width;
+
+			    //
+			    // Render PDF page into canvas context
+			    //
+			    var renderContext = {
+			      canvasContext: context,
+			      viewport: viewport
+			    };
+			    page.render(renderContext);
+			  });
+			});
+
+
+		}
+	}
+	</script>
+
 </body>
 </html>
