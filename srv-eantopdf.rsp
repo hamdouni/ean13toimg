@@ -1,0 +1,14 @@
+<%
+	do %lib-ean13.r
+	do %lib-pdf-maker.r
+	
+	validate/full [code -]
+	code: request/content/code
+	pdf: layout-pdf reduce [ean13/make-pdf/text to-string code reduce [0 0]]
+
+	response/buffer: pdf
+	response/set-header 'Content-Type 		  "application/pdf"
+	response/set-header 'Content-Disposition  rejoin ["attachment; filename=test.pdf"]
+	response/set-header 'Cache-Control 		  none
+	response/set-header 'Expires 			  none
+%>
